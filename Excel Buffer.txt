@@ -1,0 +1,38 @@
+# Excel Buffer Code
+
+-> OnPostReport()
+ExcelBuffer.DELETEALL;
+
+-> OnPostReport()
+CreateExcelBook;
+
+_____________________________________________________________________________________________________________________
+
+-> Data Item - OnPreDataItem()
+	MakeExcelHeader();
+
+-> Data Item - OnAfterGetRecord()
+	ExcelBuffer.NewRow;
+	ExcelBuffer.AddColumn(OrderAPI_Ecomm.OrderItemId,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn(lcLocation,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn(Recloc.Name,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn(Recloc.City,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn(OrderAPI_Ecomm.Barcode,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn(OrderAPI_Ecomm.ItemNo,FALSE,'',FALSE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+
+_____________________________________________________________________________________________________________________
+
+
+MakeExcelHeader()
+	ExcelBuffer.NewRow;
+	ExcelBuffer.AddColumn('GST Bill No',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn('Store No',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn('Loc Name',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn('City',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+	ExcelBuffer.AddColumn('Item Barcode',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Number);
+	ExcelBuffer.AddColumn('Item  NO.',FALSE,'',TRUE,FALSE,TRUE,'',ExcelBuffer."Cell Type"::Text);
+
+CreateExcelBook()
+	ExcelBuffer.CreateBookAndOpenExcel('Sheet1','Merchandiser Sales Report','','',USERID);
+
+_____________________________________________________________________________________________________________________

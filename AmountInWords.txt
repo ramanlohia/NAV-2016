@@ -1,0 +1,33 @@
+How to Convert Amount in Words in RDLC Reports -
+
+____________________________________________________________________________
+
+Create Variable -
+
+1.
+...Name... = RepCheck
+...Type... = 'Report'
+...SubType... = 'Check'
+
+2.
+...Name... = NoText
+...Type... = 'Text'
+...Dimension Value... = '2' (Note - To be set in Variable Properties)
+
+3.
+...Name... = AmountInWords
+...Type... = 'Text'
+
+____________________________________________________________________________
+
+OnAfterGetRecord -
+DataItem.CALCFIELDS("Amount to Vendor");
+(As amount to vendor is a flow field, So it's compulsary to use CALCFIELD to get the required OUTPUT)
+
+AmountVendor:= ROUND("Purchase Header"."Amount to Vendor",0.01);
+
+RepCheck.InitTextVariable;
+
+RepCheck.FormatNoText(NoText,AmountVendor,"Purchase Header"."Currency Code");
+
+AmountInWords:=NoText[1];

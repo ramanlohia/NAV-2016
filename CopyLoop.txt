@@ -1,0 +1,41 @@
+-> ON PRE -
+NoOfLoops := ABS(NoOfCopies) + 1;
+CopyText := 'Original for Recipient';
+SETRANGE(Number,1,NoOfLoops);
+OutputNo := 1;
+
+-> ON AFTER -
+IF Number > 1 THEN BEGIN
+IF Number=2 THEN
+  CopyText := 'Duplicate';
+IF Number=3 THEN
+  CopyText:='Triplicate';
+IF Number=4 THEN
+  CopyText:='Extra Copy';
+  OutputNo += 1;
+END;
+CurrReport.PAGENO := 1;
+
+-> REPORT PROPERTIES CODE-
+
+Shared Data1 as Object
+
+Public Function GetData(Num as Integer, Group as integer) as Object
+if Group = 1 then
+   Return Cstr(Choose(Num, Split(Cstr(Data1),Chr(177))))
+End If
+End Function
+
+Public Function SetData(NewData as Object,Group as integer)
+  If Group = 1 and NewData <> "" Then
+      Data1 = NewData
+  End If
+  Return True
+End Function
+
+# EXPRESSIONS-
+-> Text Box in Rectangle Visibility i.e. SETDATA-
+=Code.SetData(Cstr(Fields!CopyText.Value) + Chr(177) ,1)
+
+-> Header Text Box i.e. GETDATA-
+=Code.GETdata(1,1)
